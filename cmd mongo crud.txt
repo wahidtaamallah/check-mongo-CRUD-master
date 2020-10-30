@@ -1,0 +1,138 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1/Create a database called "contact"
+MongoDB Enterprise > use contact
+switched to db contact
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2/Create a collection called "contactlist"
+MongoDB Enterprise > db.createCollection("contactlist")
+{
+        "ok" : 0,
+        "errmsg" : "Collection already exists. NS: contact.contactlist",
+        "code" : 48,
+        "codeName" : "NamespaceExists"
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3/Insert 3 persons in "contactlist" :
+MongoDB Enterprise > db.contactlist.insertMany([{"Last name":"Ben Lahmer","First name":"Fares","Email":"fares@gmail.com","age":26},
+...  {"Last name":"Kefi","First name":"Seif","Email":"kefi@gmail.com","age":15},
+... {"Last name":"Fatnassi","First name":"Sarra","Email":"sarra.f@gmail.com","age":40},
+...  {"Last name":"Ben Yahia","First name":"Rym","age":4},
+... {"Last name":"Cherif","First name":"Sami","age":3}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("5f4bd8699def167b7b8a7bc6"),
+                ObjectId("5f4bd8699def167b7b8a7bc7"),
+                ObjectId("5f4bd8699def167b7b8a7bc8"),
+                ObjectId("5f4bd8699def167b7b8a7bc9"),
+                ObjectId("5f4bd8699def167b7b8a7bca")
+        ]
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+4/Display all the contact list
+MongoDB Enterprise > db.contactlist.find().pretty()
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc6"),
+        "Last name" : "Ben Lahmer",
+        "First name" : "Fares",
+        "Email" : "fares@gmail.com",
+        "age" : 26
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc7"),
+        "Last name" : "Kefi",
+        "First name" : "Seif",
+        "Email" : "kefi@gmail.com",
+        "age" : 15
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc8"),
+        "Last name" : "Fatnassi",
+        "First name" : "Sarra",
+        "Email" : "sarra.f@gmail.com",
+        "age" : 40
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc9"),
+        "Last name" : "Ben Yahia",
+        "First name" : "Rym",
+        "age" : 4
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bca"),
+        "Last name" : "Cherif",
+        "First name" : "Sami",
+        "age" : 3
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+5/Display all the information about only one person using his id
+MongoDB Enterprise > db.contactlist.find({"_id" : ObjectId("5f4bd8699def167b7b8a7bc6")})
+{ "_id" : ObjectId("5f4bd8699def167b7b8a7bc6"), "Last name" : "Ben Lahmer", "First name" : "Fares", "Email" : "fares@gmail.com", "age" : 26 }
+MongoDB Enterprise > db.contactlist.find({age:{$gt:18}}).pretty()
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc6"),
+        "Last name" : "Ben Lahmer",
+        "First name" : "Fares",
+        "Email" : "fares@gmail.com",
+        "age" : 26
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc8"),
+        "Last name" : "Fatnassi",
+        "First name" : "Sarra",
+        "Email" : "sarra.f@gmail.com",
+        "age" : 40
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+6/Display all the contact list having age>18
+MongoDB Enterprise > db.contactlist.find({age:{$gt:18},"Last name": /ah/}).pretty()
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc6"),
+        "Last name" : "Ben Lahmer",
+        "First name" : "Fares",
+        "Email" : "fares@gmail.com",
+        "age" : 26
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+7/Display all the contact list having age>18 and name containing "ah"
+MongoDB Enterprise > db.contactlist.find({age:{$gt:18},"Last name": /ah/}).pretty()
+{
+        "_id" : ObjectId("5f4bda469def167b7b8a7bcb"),
+        "Last name" : "Ben Lahmer",
+        "First name" : "Fares",
+        "Email" : "fares@gmail.com",
+        "age" : 26
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+8/Change the contact first name of "kefi Seif" by "Kefi Anis"
+MongoDB Enterprise > db.contactlist.update({"Last name":"Kefi", "First name":"Seif"},{$set:{"First name": "Anis"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+9/Delete the the contact list having age < 5
+MongoDB Enterprise > db.contactlist.remove({age:{$lt:5}})
+WriteResult({ "nRemoved" : 2 })
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+10/Display all the contact list
+MongoDB Enterprise > db.contactlist.find().pretty()
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc6"),
+        "Last name" : "Ben Lahmer",
+        "First name" : "Fares",
+        "Email" : "fares@gmail.com",
+        "age" : 26
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc7"),
+        "Last name" : "Kefi",
+        "First name" : "Anis",
+        "Email" : "kefi@gmail.com",
+        "age" : 15
+}
+{
+        "_id" : ObjectId("5f4bd8699def167b7b8a7bc8"),
+        "Last name" : "Fatnassi",
+        "First name" : "Sarra",
+        "Email" : "sarra.f@gmail.com",
+        "age" : 40
+}
+
